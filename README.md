@@ -12,8 +12,9 @@ With search Helper you can search all over popular websites with just two clicks
 2- type or paste your search text<br>
 3- click on your favorite website <br>
 <b>Done</b>
-
 now search helper will harvest the power of the sun and open a new tab for you with the search results you needed :)<br>
+
+you can also add your own search 
 
 to install all you need to do is the following<br>
  1- clone or download the files from this repo into a folder<br>
@@ -24,6 +25,8 @@ to install all you need to do is the following<br>
  note : We didn't put the extesnion on the chrome store for two reasons:<br>
  - lack of funding
  - I am broke af
+ 
+ this product is still in devolpment, if you notice any bug please open an issues with as much details as you can in description
 
 -------------------------------------------------------------------------<br>
 The Project is open for contributions just fork, edit, submit pull request and send me an email :  abdalaosamah@gmail.com<br>
