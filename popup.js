@@ -40,15 +40,22 @@ sites = [
     }
 ]
 //------------------------------------------------------------------ 
+chrome.storage.sync.get(['first'], function(result) { // applying the default if they werent set already
+    if(result.first != 'no'){
+        chrome.storage.sync.set({first:'no', sites: JSON.stringify(sites) }, function(result) { console.log(result)})
+    }
+})
+
+
+
 chrome.storage.sync.get(['sites'], function(result) {
     console.log(result.sites);
-    if( result.sites ) {
-  //      sites = JSON.parse( result.sites )
+    if( result.sites.length > 0 ) {
+        sites = JSON.parse( result.sites )
+ 
     }else{
         chrome.storage.sync.set({sites : JSON.stringify(sites)}, function(result) { console.log(result)})
     }
-  });
-
     if(sites.length > 0){$('.sites').empty();} // if There is no sites, Display You dont Have any sites
     
     for( site of sites){//Putting the buttons
@@ -57,8 +64,6 @@ chrome.storage.sync.get(['sites'], function(result) {
         $('.sites').append(el);
     }
 
-    $('#search-field').focus(); // focusing the Search bar
-
     $('.card').on('click',function() {
         let id = $(this).data('site')//get the site id
         let site = sites.find(x => x.id == id ) //get the site
@@ -66,6 +71,11 @@ chrome.storage.sync.get(['sites'], function(result) {
         chrome.tabs.create({ url: url }); // open new tab with the new url
     });
 
+});
+
+    $('#search-field').focus(); // focusing the Search bar
+
+    
 
 //------------------------------------------------------------------ Settings
     $('.settings').on('click', function() {
@@ -83,8 +93,37 @@ chrome.storage.sync.get(['sites'], function(result) {
         }
         
     });
+
+$('#newsite').on('click',function(){
+    $('#addsite').css('display','inline');
+    
+});
+$('#main').on('click',(e)=>{
+     $('#addsite').css('display','none');
+ });
     function formate(string,SpaceChar){
+
         return string.replace(' ',(SpaceChar?SpaceChar:' '));
     }
         
 
+$('#add').on('click',function(){ // inserting new websites
+    let sitename = $('#name').val();
+    let siteurl = $('#url').val();
+    
+    var largest= 0;
+    for (let i=0; i < sites.length;i++){
+        if (sites[i].id > largest) {
+            largest = sites[i].id;
+        }
+    }
+    sites.push({
+        "id":largest + 1,
+    "name":sitename,
+    "url":siteurl}
+    )
+    alert(sites)
+    chrome.storage.sync.set({sites : JSON.stringify(sites)}, function(result) { console.log(result)});
+    alert('site added')
+
+});

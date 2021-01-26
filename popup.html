@@ -8,16 +8,18 @@
     <title>Search helper</title>
 </head>
 <body>
+    
     <h1>Search Helper</h1>
     <span class="settings"><i class="fas fa-cog"></i></span>
+    <button id="newsite">add new site</button>
     <div id="main">
     <div class="search">
         <input  id ="search-field" type="text" placeholder="Type your search here">
+        
     </div>
     <div class="sites">
         <h1>You Have No sites go to the Setting to add</h1>
     </div>
-</div>
     <div id="settings"> 
         <input type="checkbox">
         <label>Dark mode</label>
@@ -25,6 +27,15 @@
         <label>Dark mode</label>
         <input type="checkbox">
         <label>Dark mode</label>
+    </div>
+</div>
+    
+    <div id="addsite">
+        name<br>
+        <input id="name" type="text"><br>
+        url<br>
+        <input id="url" type="text"><br>
+        <button id="add">add</button>
     </div>
 
     <script src="jquery-3.5.1.js"></script>
