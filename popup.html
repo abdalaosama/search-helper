@@ -10,9 +10,9 @@
 <body>
     
     <h1>Search Helper</h1>
-    <span class="settings"><i class="fas fa-cog"></i></span>
-    <button id="newsite">add new site</button>
-    <div id="main">
+    <span class="setting"><i class="fas fa-cog"></i></span>
+    
+<div id="main">
     <div class="search">
         <input  id ="search-field" type="text" placeholder="Type your search here">
         
@@ -20,22 +20,34 @@
     <div class="sites">
         <h1>You Have No sites go to the Setting to add</h1>
     </div>
-    <div id="settings"> 
-        <input type="checkbox">
-        <label>Dark mode</label>
-        <input type="checkbox">
-        <label>Dark mode</label>
-        <input type="checkbox">
-        <label>Dark mode</label>
-    </div>
-</div>
     
+</div>
+
+<div class="settings">
+    <div class="div1">
+        
+        <button id="newsite">add new site</button><br>
+        <i class="fas fa-plus" style="color: green;"></i>
+    </div>
+    <div class="div2"> <button id="removesite">remove site</button><br>
+        <i class="fas fa-minus" style="color: red;"></i> </div>
+    <div class="div3">
+    
+    <input type="checkbox">
+    darkmode<br>
+    <input type="checkbox">
+    Open a new tab for search<br>
+    </div>
+    </div>
     <div id="addsite">
         name<br>
         <input id="name" type="text"><br>
         url<br>
         <input id="url" type="text"><br>
         <button id="add">add</button>
+    </div>
+    <div id="remove">
+        
     </div>
 
     <script src="jquery-3.5.1.js"></script>

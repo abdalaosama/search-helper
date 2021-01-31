@@ -1,7 +1,5 @@
 const getIconUrl = "https://s2.googleusercontent.com/s2/favicons?domain="// this Url Return the FavIcon of any website url
-
-
-sites = [
+sites = [ // default Webisites
     {
         "id":1,
         "name":"Google",
@@ -40,55 +38,41 @@ sites = [
     }
 ]
 //------------------------------------------------------------------ 
-chrome.storage.sync.get(['first'], function(result) { // applying the default if they werent set already
+
+
+chrome.storage.sync.get(['first','sites'], function(result) { // applying the default if they werent set already
     if(result.first != 'no'){
         chrome.storage.sync.set({first:'no', sites: JSON.stringify(sites) }, function(result) { console.log(result)})
+    }else{
+        if(result.sites.length >= 0) {
+            updateStorage();
+        }
+        chrome.storage.sync.get(['sites'], function(result) {
+                sites = JSON.parse( result.sites )
+            if(sites.length > 0){
+                
+                
+                $('#search-field').focus(); // focusing the Search bar
+                render();
+            
+            } // if There is no sites, Display You dont Have any sites
+        });
+        $('.settings').hide()
     }
 })
 
-
-
-chrome.storage.sync.get(['sites'], function(result) {
-    console.log(result.sites);
-    if( result.sites.length > 0 ) {
-        sites = JSON.parse( result.sites )
- 
-    }else{
-        chrome.storage.sync.set({sites : JSON.stringify(sites)}, function(result) { console.log(result)})
-    }
-    if(sites.length > 0){$('.sites').empty();} // if There is no sites, Display You dont Have any sites
-    
-    for( site of sites){//Putting the buttons
-        
-        var el = `<span data-site="${site.id}" class="card"><img width="30" height="30" src="${getIconUrl+site.url}"><br><span class="button" >${site.name}</span></span>`
-        $('.sites').append(el);
-    }
-
-    $('.card').on('click',function() {
-        let id = $(this).data('site')//get the site id
-        let site = sites.find(x => x.id == id ) //get the site
-        let url = site.url+formate($('#search-field').val(), (site.spaceChar?site.spaceChar:null)); //Create the url to go to
-        chrome.tabs.create({ url: url }); // open new tab with the new url
-    });
-
-});
-
-    $('#search-field').focus(); // focusing the Search bar
-
-    
-
 //------------------------------------------------------------------ Settings
-    $('.settings').on('click', function() {
+$('.setting').on('click', function() {
         if($(this).hasClass('active')){
             $('#main').css('transform','translateX(0px)')
-            $('#main').css('position','')
-            
+            $('#main').show()
+            $('.settings').hide()
             $(this).removeClass('active');
-            
+            render()
         }else{
             $('#main').css('transform','translateX(-500px)')
-            $('#main').css('position','absolute')
-            
+            $('#main').hide()
+            $('.settings').show()
             $(this).addClass('active');
         }
         
@@ -98,6 +82,27 @@ $('#newsite').on('click',function(){
     $('#addsite').css('display','inline');
     
 });
+$('#removesite').on('click',function(){
+    $('#remove').empty();
+    for( site of sites){
+        var el = `<span data-site="${site.id}" class="remcard"><img width="30" height="30" src="${getIconUrl+site.url}"><br><span class="button" >${site.name}</span></span>`
+        $('#remove').append(el);
+        $('#remove').show();
+    }
+    $('.remcard').on('click',function() { // the buttons events
+        let id = $(this).data('site')//get the site id
+        sites.splice( sites.findIndex(x => x.id == id ), 1);
+        updateStorage();
+        $('#remove').hide();
+    });
+
+
+});
+
+function updateStorage(){
+    chrome.storage.sync.set({first:'no', sites: JSON.stringify(sites) }, function(result) { console.log(result)})
+}
+
 $('#main').on('click',(e)=>{
      $('#addsite').css('display','none');
  });
@@ -122,8 +127,21 @@ $('#add').on('click',function(){ // inserting new websites
     "name":sitename,
     "url":siteurl}
     )
-    alert(sites)
-    chrome.storage.sync.set({sites : JSON.stringify(sites)}, function(result) { console.log(result)});
-    alert('site added')
-
+    updateStorage();
+    $('#addsite').hide();
 });
+
+function render(){//Drawing the buttons
+    $('.sites').empty();
+    for( site of sites){
+        var el = `<span data-site="${site.id}" class="card"><img width="30" height="30" src="${getIconUrl+site.url}"><br><span class="button" >${site.name}</span></span>`
+        $('.sites').append(el);
+
+    }
+    $('.card').on('click',function() { // the buttons events
+        let id = $(this).data('site')//get the site id
+        let site = sites.find(x => x.id == id ) //get the site
+        let url = site.url+formate($('#search-field').val(), (site.spaceChar?site.spaceChar:null)); //Create the url to go to
+        chrome.tabs.create({ url: url }); // open new tab with the new url
+    });
+}
